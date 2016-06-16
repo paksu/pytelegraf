@@ -1,0 +1,96 @@
+from client import TelegrafClient, Line
+from utils import format_string, format_value
+import unittest
+import mock
+
+
+class TestLine(unittest.TestCase):
+    def test_format_key(self):
+        self.assertEquals(format_string('foo'), 'foo')
+        self.assertEquals(format_string('foo,bar'), 'foo\,bar')
+        self.assertEquals(format_string('foo bar'), 'foo\ bar')
+        self.assertEquals(format_string('foo ,bar'), 'foo\ \,bar')
+
+    def test_format_value(self):
+        self.assertEquals(format_value('foo'), '"foo"')
+        self.assertEquals(format_value('foo bar'), '"foo bar"')
+        self.assertEquals(format_value('foo "and" bar'), '"foo \"and\" bar"')
+        self.assertEquals(format_value(123), "123i")
+        self.assertEquals(format_value(123.123), "123.123")
+        self.assertEquals(format_value(True), "True")
+        self.assertEquals(format_value(False), "False")
+
+    def test_single_value(self):
+        self.assertEquals(
+            Line('some_series', 1).to_line_protocol(),
+            'some_series value=1i'
+        )
+
+    def test_single_value_and_tags(self):
+        self.assertEquals(
+            Line('some_series', 1, {'foo': 'bar', 'foobar': 'baz'}).to_line_protocol(),
+            'some_series,foobar=baz,foo=bar value=1i'
+        )
+
+    def test_multiple_values(self):
+        self.assertEquals(
+            Line('some_series', {'value': 232.123, 'value2': 123}).to_line_protocol(),
+            'some_series value2=123i,value=232.123'
+        )
+
+    def test_multiple_values_and_tags(self):
+        self.assertEquals(
+            Line('some_series', {'value': 232.123, 'value2': 123}, {'foo': 'bar', 'foobar': 'baz'}).to_line_protocol(),
+            'some_series,foobar=baz,foo=bar value2=123i,value=232.123'
+        )
+
+    def test_tags_and_measurement_with_whitespace_and_comma(self):
+        self.assertEquals(
+            Line(
+                'white space',
+                {'value, comma': "foo"},
+                {'tag with, comma': 'hello, world'}
+            ).to_line_protocol(),
+            """white\ space,tag\ with\,\ comma=hello\,\ world value\,\ comma="foo\""""
+        )
+
+    def test_boolean_value(self):
+        self.assertEquals(
+            Line('some_series', True).to_line_protocol(),
+            'some_series value=True'
+        )
+
+    def test_value_escaped_and_quoted(self):
+        self.assertEquals(
+            Line('some_series', 'foo "bar"').to_line_protocol(),
+            'some_series value="foo \"bar\""'
+        )
+
+    def test_with_timestamp(self):
+        self.assertEquals(
+            Line('some_series', 1000, timestamp=1234134).to_line_protocol(),
+            'some_series value=1000i 1234134'
+        )
+
+
+class TestTelegraf(unittest.TestCase):
+    def setUp(self):
+        self.host = 'host'
+        self.port = 1234
+        self.addr = (self.host, self.port)
+
+    def test_sending_to_socket(self):
+        self.client = TelegrafClient(self.host, self.port)
+        self.client.socket = mock.Mock()
+
+        self.client.write('some_series', 1)
+        self.client.socket.sendto.assert_called_with('some_series value=1i', self.addr)
+        self.client.write('cpu', {'value_int': 1}, {'host': 'server-01', 'region': 'us-west'})
+        self.client.socket.sendto.assert_called_with('cpu,host=server-01,region=us-west value_int=1i', self.addr)
+
+    def test_global_tags(self):
+        self.client = TelegrafClient(self.host, self.port, tags={'host': 'host-001'})
+        self.client.socket = mock.Mock()
+
+        self.client.write('some_series', 1)
+        self.client.socket.sendto.assert_called_with('some_series,host=host-001 value=1i', self.addr)
