@@ -85,14 +85,14 @@ class TestTelegraf(unittest.TestCase):
         self.client = TelegrafClient(self.host, self.port)
         self.client.socket = mock.Mock()
 
-        self.client.write('some_series', 1)
+        self.client.metric('some_series', 1)
         self.client.socket.sendto.assert_called_with(b'some_series value=1i', self.addr)
-        self.client.write('cpu', {'value_int': 1}, {'host': 'server-01', 'region': 'us-west'})
+        self.client.metric('cpu', {'value_int': 1}, {'host': 'server-01', 'region': 'us-west'})
         self.client.socket.sendto.assert_called_with(b'cpu,host=server-01,region=us-west value_int=1i', self.addr)
 
     def test_global_tags(self):
         self.client = TelegrafClient(self.host, self.port, tags={'host': 'host-001'})
         self.client.socket = mock.Mock()
 
-        self.client.write('some_series', 1)
+        self.client.metric('some_series', 1)
         self.client.socket.sendto.assert_called_with(b'some_series,host=host-001 value=1i', self.addr)

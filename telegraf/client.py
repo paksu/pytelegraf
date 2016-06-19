@@ -11,9 +11,10 @@ class TelegrafClient(object):
         self.tags = tags
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    def write(self, series_name, values, tags={}, timestamp=None):
+    def metric(self, series_name, values, tags={}, timestamp=None):
         """
-        Append global tags to the data given and send it
+        Append global tags configured for the client to the tags given then
+        converts the data into InfluxDB Line protocol and sends to to socket
         """
         all_tags = copy.copy(self.tags)
         all_tags.update(tags)
