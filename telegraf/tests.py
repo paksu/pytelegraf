@@ -96,3 +96,6 @@ class TestTelegraf(unittest.TestCase):
 
         self.client.metric('some_series', 1)
         self.client.socket.sendto.assert_called_with(b'some_series,host=host-001 value=1i', self.addr)
+
+        self.client.metric('some_series', 1, tags={'host': 'override-host-tag'})
+        self.client.socket.sendto.assert_called_with(b'some_series,host=override-host-tag value=1i', self.addr)
