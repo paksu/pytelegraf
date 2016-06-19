@@ -1,5 +1,6 @@
-from client import TelegrafClient, Line
-from utils import format_string, format_value
+from telegraf.client import TelegrafClient
+from telegraf.protocol import Line
+from telegraf.utils import format_string, format_value
 import unittest
 import mock
 
