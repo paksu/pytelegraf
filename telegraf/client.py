@@ -32,19 +32,29 @@ class Line(object):
         else:
             values = self.values
 
-        return ",".join("{0}={1}".format(format_string(k), format_value(v)) for k, v in values.items())
+        # Order the values first
+        value_order = sorted(values.keys(), key=str.lower)
+
+        return ",".join("{0}={1}".format(format_string(value_name), format_value(values[value_name])) for value_name in value_order)
 
     def get_output_tags(self):
         """
         Return an escaped string of comma separated tag_name: tag_value pairs
+
+        Tags should be sorted by key before being sent for best performance. The sort should
+        match that from the Go bytes.Compare function (http://golang.org/pkg/bytes/#Compare).
         """
-        return ",".join("{0}={1}".format(format_string(k), format_string(v)) for k, v in self.tags.items())
+
+        # Order the tags first
+        tag_order = sorted(self.tags.keys(), key=str.lower)
+
+        return ",".join("{0}={1}".format(format_string(tag_name), format_string(self.tags[tag_name])) for tag_name in tag_order)
 
     def get_output_timestamp(self):
         """
         Formats timestamp so it can be rendered to line protocol
         """
-        return " {}".format(self.timestamp) if self.timestamp else ""
+        return " {0}".format(self.timestamp) if self.timestamp else ""
 
     def to_line_protocol(self):
         """
@@ -52,7 +62,7 @@ class Line(object):
         """
         tags = self.get_output_tags()
 
-        return "{}{} {}{}".format(
+        return "{0}{1} {2}{3}".format(
             self.get_output_measurement(),
             "," + tags if tags else '',
             self.get_output_values(),

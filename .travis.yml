@@ -1,0 +1,13 @@
+language: python
+python:
+ - "2.7"
+ - "3.2"
+ - "3.3"
+ - "3.4"
+ - "3.5"
+ - "pypy"
+install:
+ - pip install -q  -r dev_requirements.txt
+script:
+ - python -m unittest discover telegraf
+ - flake8 telegraf/

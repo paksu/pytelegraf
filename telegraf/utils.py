@@ -1,3 +1,10 @@
+try:
+    basestring
+except NameError:
+    # For python 3 compatibility
+    basestring = str
+
+
 def format_string(key):
     """
     Formats either measurement names, tag names or tag values.
@@ -29,11 +36,11 @@ def format_value(value):
     """
     if isinstance(value, basestring):
         value = value.replace('"', '\"')
-        value = '"{}"'.format(value)
+        value = '"{0}"'.format(value)
     elif isinstance(value, bool):
         value = str(value)
     elif isinstance(value, int):
-        value = "{}i".format(value)
+        value = "{0}i".format(value)
     elif isinstance(value, float):
         value = str(value)
     return value

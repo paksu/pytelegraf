@@ -5,6 +5,7 @@ import mock
 
 
 class TestLine(unittest.TestCase):
+
     def test_format_key(self):
         self.assertEquals(format_string('foo'), 'foo')
         self.assertEquals(format_string('foo,bar'), 'foo\,bar')
@@ -29,19 +30,19 @@ class TestLine(unittest.TestCase):
     def test_single_value_and_tags(self):
         self.assertEquals(
             Line('some_series', 1, {'foo': 'bar', 'foobar': 'baz'}).to_line_protocol(),
-            'some_series,foobar=baz,foo=bar value=1i'
+            'some_series,foo=bar,foobar=baz value=1i'
         )
 
     def test_multiple_values(self):
         self.assertEquals(
             Line('some_series', {'value': 232.123, 'value2': 123}).to_line_protocol(),
-            'some_series value2=123i,value=232.123'
+            'some_series value=232.123,value2=123i'
         )
 
     def test_multiple_values_and_tags(self):
         self.assertEquals(
             Line('some_series', {'value': 232.123, 'value2': 123}, {'foo': 'bar', 'foobar': 'baz'}).to_line_protocol(),
-            'some_series,foobar=baz,foo=bar value2=123i,value=232.123'
+            'some_series,foo=bar,foobar=baz value=232.123,value2=123i'
         )
 
     def test_tags_and_measurement_with_whitespace_and_comma(self):
@@ -84,13 +85,13 @@ class TestTelegraf(unittest.TestCase):
         self.client.socket = mock.Mock()
 
         self.client.write('some_series', 1)
-        self.client.socket.sendto.assert_called_with('some_series value=1i', self.addr)
+        self.client.socket.sendto.assert_called_with(b'some_series value=1i', self.addr)
         self.client.write('cpu', {'value_int': 1}, {'host': 'server-01', 'region': 'us-west'})
-        self.client.socket.sendto.assert_called_with('cpu,host=server-01,region=us-west value_int=1i', self.addr)
+        self.client.socket.sendto.assert_called_with(b'cpu,host=server-01,region=us-west value_int=1i', self.addr)
 
     def test_global_tags(self):
         self.client = TelegrafClient(self.host, self.port, tags={'host': 'host-001'})
         self.client.socket = mock.Mock()
 
         self.client.write('some_series', 1)
-        self.client.socket.sendto.assert_called_with('some_series,host=host-001 value=1i', self.addr)
+        self.client.socket.sendto.assert_called_with(b'some_series,host=host-001 value=1i', self.addr)
