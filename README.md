@@ -1,12 +1,18 @@
-# Pygraf
+# Pytelegraf
 > Python client for sending metrics to Telegraf inspired by pystatsd
 
-[![Build Status](https://travis-ci.org/paksu/pygraf.svg?branch=master)](https://travis-ci.org/paksu/pygraf)
+[![Build Status](https://travis-ci.org/paksu/pytelegraf.svg?branch=master)](https://travis-ci.org/paksu/pytelegraf)
 
 Designed to work with Telegraf UDP listener input plugin.
 https://github.com/influxdata/telegraf/tree/master/plugins/inputs/udp_listener
 
-Pygraf outputs InfluxDB line protocol https://docs.influxdata.com/influxdb/v0.13/write_protocols/line/
+Pytelegraf outputs InfluxDB line protocol https://docs.influxdata.com/influxdb/v0.13/write_protocols/line/
+
+---
+If you find this library useful please let me know https://twitter.com/joonapaak
+
+### How to install
+```pip install pytelegraf```
 
 ### Usage
 
@@ -21,7 +27,7 @@ client.metric('some_metric', 123)
 client.metric('some_metric', {'value_a': 100, 'value_b': 100, 'value_c': True})
 
 # Records a single value with one tag
-client.metric('some_metric', 123, tags={'server_name'='my-server'})
+client.metric('some_metric', 123, tags={'server_name': 'my-server'})
 ```
 
 #### Global tags
@@ -76,3 +82,10 @@ from telegraf.defaults.django import telegraf
 
 telegraf.metric('some-metric', 1)
 ```
+
+### How to develop
+
+- Clone or fork this repo
+- Make changes
+- Run tests with `python setup.py test`
+- Submit a pull request
