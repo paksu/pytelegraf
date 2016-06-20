@@ -25,28 +25,38 @@ class Line(object):
         """
         Return an escaped string of comma separated value_name: value pairs
         """
+        # Handle primitive values here and implicitly convert them to a dict because
+        # it allows the API to be simpler.
+
+        # Also influxDB mandates that each value also has a name so the default name
+        # for any non-dict value is "value"
         if not isinstance(self.values, dict):
-            values = {'value': self.values}
+            metric_values = {'value': self.values}
         else:
-            values = self.values
+            metric_values = self.values
 
-        # Order the values first
-        value_order = sorted(values.keys(), key=str.lower)
+        # Get the lexicographically ordered list of value names first
+        sorted_value_names = sorted(metric_values.keys(), key=str.lower)
+        # Then get the list of sorted value_name: value tuples
+        sorted_values = [(value_name, metric_values[value_name]) for value_name in sorted_value_names]
 
-        return ",".join("{0}={1}".format(format_string(value_name), format_value(values[value_name])) for value_name in value_order)
+        return ",".join("{0}={1}".format(format_string(k), format_value(v)) for k, v in sorted_values)
 
     def get_output_tags(self):
         """
         Return an escaped string of comma separated tag_name: tag_value pairs
 
         Tags should be sorted by key before being sent for best performance. The sort should
-        match that from the Go bytes.Compare function (http://golang.org/pkg/bytes/#Compare).
+        match that from the Go bytes. Compare function (http://golang.org/pkg/bytes/#Compare).
         """
 
-        # Order the tags first
-        tag_order = sorted(self.tags.keys(), key=str.lower)
+        # Get the lexicographically ordered list of tag names first
+        sorted_tag_names = sorted(self.tags.keys(), key=str.lower)
+        # Then get the list of sorted tag_name: tag_value tuples
+        sorted_tags = [(tag_name, self.tags[tag_name]) for tag_name in sorted_tag_names]
 
-        return ",".join("{0}={1}".format(format_string(tag_name), format_string(self.tags[tag_name])) for tag_name in tag_order)
+        # Finally render, escape and return the tag string
+        return ",".join("{0}={1}".format(format_string(k), format_string(v)) for k, v in sorted_tags)
 
     def get_output_timestamp(self):
         """

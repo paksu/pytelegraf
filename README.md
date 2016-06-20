@@ -65,9 +65,9 @@ Just follow the sample configuration https://github.com/influxdata/telegraf/tree
 
 Define configuration in Django settings
 ```
-TELEGRAF_HOST='localhost'
-TELEGRAF_PORT=8092
-TELEGRAF_TAGS={'some-global-tag': 'some-value'}
+TELEGRAF_HOST = 'localhost'
+TELEGRAF_PORT = 8092
+TELEGRAF_TAGS = {'some-global-tag': 'some-value'}
 ```
 
 Then use the client in code
