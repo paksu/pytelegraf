@@ -74,6 +74,18 @@ class TestLine(unittest.TestCase):
             'some_series value=1000i 1234134'
         )
 
+    def test_tags_ordered_properly(self):
+        self.assertEquals(
+            Line('some_series', 1, {'a': 1, 'baa': 1, 'AAA': 1, 'aaa': 1}).to_line_protocol(),
+            'some_series,AAA=1,a=1,aaa=1,baa=1 value=1i'
+        )
+
+    def test_values_ordered_properly(self):
+        self.assertEquals(
+            Line('some_series', {'a': 1, 'baa': 1, 'AAA': 1, 'aaa': 1}).to_line_protocol(),
+            'some_series AAA=1i,a=1i,aaa=1i,baa=1i'
+        )
+
 
 class TestTelegraf(unittest.TestCase):
     def setUp(self):

@@ -35,10 +35,8 @@ class Line(object):
         else:
             metric_values = self.values
 
-        # Get the lexicographically ordered list of value names first
-        sorted_value_names = sorted(metric_values.keys(), key=str.lower)
-        # Then get the list of sorted value_name: value tuples
-        sorted_values = [(value_name, metric_values[value_name]) for value_name in sorted_value_names]
+        # Sort the values in lexicographically by value name
+        sorted_values = sorted(metric_values.items())
 
         return ",".join("{0}={1}".format(format_string(k), format_value(v)) for k, v in sorted_values)
 
@@ -50,10 +48,8 @@ class Line(object):
         match that from the Go bytes. Compare function (http://golang.org/pkg/bytes/#Compare).
         """
 
-        # Get the lexicographically ordered list of tag names first
-        sorted_tag_names = sorted(self.tags.keys(), key=str.lower)
-        # Then get the list of sorted tag_name: tag_value tuples
-        sorted_tags = [(tag_name, self.tags[tag_name]) for tag_name in sorted_tag_names]
+        # Sort the tags in lexicographically by tag name
+        sorted_tags = sorted(self.tags.items())
 
         # Finally render, escape and return the tag string
         return ",".join("{0}={1}".format(format_string(k), format_string(v)) for k, v in sorted_tags)
