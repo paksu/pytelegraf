@@ -1,11 +1,11 @@
 from setuptools import find_packages, setup
 
 setup(
-    name='pygraf',
+    name='pytelegraf',
     version='0.1.0',
     description='Telegraf client',
     author='paksu',
-    url='https://github.com/paksu/pygraf',
+    url='https://github.com/paksu/pytelegraf',
     license='MIT',
     packages=find_packages(),
     include_package_data=True,
