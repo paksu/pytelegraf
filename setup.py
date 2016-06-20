@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='pytelegraf',
-    version='0.1.0',
+    version='0.1.1',
     description='Telegraf client',
     author='paksu',
     url='https://github.com/paksu/pytelegraf',
