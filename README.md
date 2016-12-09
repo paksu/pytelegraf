@@ -57,6 +57,16 @@ Will send the following line
 some_metric,host=another-host-001,some_tag=some_value value=123i
 ```
 
+### HTTP Client
+The default `TelegrafClient` uses UDP to send metrics to Telegraf. The `HttpClient` works similarly, except that it issues requests via an HTTP POST. HTTP introduces non-trivial overhead, so to avoid blocking the main thread, these POSTs are issued in the background.
+
+```
+from telegraf import HttpClient
+
+http_client = HttpClient(host='localhost', port=8186)
+http_client.metric('some_metric', 123, tags={'server_name': 'my-server'})
+```
+
 ### Telegraf configuration
 Just follow the sample configuration https://github.com/influxdata/telegraf/tree/master/plugins/inputs/udp_listener
 

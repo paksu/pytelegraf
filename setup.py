@@ -2,13 +2,16 @@ from setuptools import find_packages, setup
 
 setup(
     name='pytelegraf',
-    version='0.1.1',
+    version='0.2.0',
     description='Telegraf client',
     author='paksu',
     url='https://github.com/paksu/pytelegraf',
     license='MIT',
     packages=find_packages(),
     include_package_data=True,
+    install_requires=[
+        'requests-futures==0.9.7'
+    ],
     test_suite='telegraf.tests',
     classifiers=[
         'Environment :: Web Environment',

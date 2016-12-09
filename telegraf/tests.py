@@ -1,4 +1,4 @@
-from telegraf.client import TelegrafClient
+from telegraf.client import TelegrafClient, HttpClient
 from telegraf.protocol import Line
 from telegraf.utils import format_string, format_value
 import unittest
@@ -111,3 +111,31 @@ class TestTelegraf(unittest.TestCase):
 
         self.client.metric('some_series', 1, tags={'host': 'override-host-tag'})
         self.client.socket.sendto.assert_called_with(b'some_series,host=override-host-tag value=1i\n', self.addr)
+
+
+class TestTelegrafHttp(unittest.TestCase):
+    def setUp(self):
+        self.host = 'host'
+        self.port = 1234
+        self.url = 'http://{host}:{port}/write'.format(host=self.host, port=self.port)
+
+    def test_sending_to_http(self):
+        self.client = HttpClient(self.host, self.port)
+        self.client.future_session = mock.Mock()
+
+        self.client.metric('some_series', 1)
+        self.client.future_session.post.assert_called_with(url=self.url, data='some_series value=1i')
+        self.client.metric('cpu', {'value_int': 1}, {'host': 'server-01', 'region': 'us-west'})
+        self.client.future_session.post.assert_called_with(url=self.url,
+                                                           data='cpu,host=server-01,region=us-west value_int=1i')
+
+    def test_global_tags(self):
+        self.client = HttpClient(self.host, self.port, tags={'host': 'host-001'})
+        self.client.future_session = mock.Mock()
+
+        self.client.metric('some_series', 1)
+        self.client.future_session.post.assert_called_with(data='some_series,host=host-001 value=1i', url=self.url)
+
+        self.client.metric('some_series', 1, tags={'host': 'override-host-tag'})
+        self.client.future_session.post.assert_called_with(data='some_series,host=override-host-tag value=1i',
+                                                           url=self.url)
