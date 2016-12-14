@@ -9,9 +9,9 @@ setup(
     license='MIT',
     packages=find_packages(),
     include_package_data=True,
-    install_requires=[
-        'requests-futures==0.9.7'
-    ],
+    extras_require={
+        'http': ['requests-futures==0.9.7']
+    },
     test_suite='telegraf.tests',
     classifiers=[
         'Environment :: Web Environment',

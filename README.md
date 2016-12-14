@@ -60,6 +60,8 @@ some_metric,host=another-host-001,some_tag=some_value value=123i
 ### HTTP Client
 The default `TelegrafClient` uses UDP to send metrics to Telegraf. The `HttpClient` works similarly, except that it issues requests via an HTTP POST. HTTP introduces non-trivial overhead, so to avoid blocking the main thread, these POSTs are issued in the background.
 
+To use the `HttpClient`, `pytelegraf` must be installed like this: `pip install pytelegraf[http]`. Alternatively, add `pytelegraf[http]` to `requirements.txt`.
+
 ```
 from telegraf import HttpClient
 

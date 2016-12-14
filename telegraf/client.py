@@ -1,6 +1,5 @@
 from abc import abstractmethod
 from telegraf.protocol import Line
-from requests_futures.sessions import FuturesSession
 import socket
 
 
@@ -56,6 +55,13 @@ class TelegrafClient(ClientBase):
 class HttpClient(ClientBase):
 
     def __init__(self, host='localhost', port=8094, tags=None):
+        # only import HttpClient's dependencies if using HttpClient
+        # if they're not found, inform the user how to install them
+        try:
+            from requests_futures.sessions import FuturesSession
+        except ImportError:
+            raise ImportError('pytelegraf[http] must be installed to use HTTP transport')
+
         super(HttpClient, self).__init__(host, port, tags)
 
         # the default url path for writing metrics to Telegraf is /write
