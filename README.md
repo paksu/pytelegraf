@@ -101,3 +101,6 @@ telegraf.metric('some-metric', 1)
 - Make changes
 - Run tests with `python setup.py test`
 - Submit a pull request
+
+### Contributors
+- bobo333
