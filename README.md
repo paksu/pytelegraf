@@ -11,6 +11,8 @@ Pytelegraf outputs InfluxDB line protocol https://docs.influxdata.com/influxdb/v
 ---
 If you find this library useful please let me know https://twitter.com/joonapaak
 
+If you have an idea how this library can be improved then open an issue or even better send a pull request :)
+
 ### How to install
 ```pip install pytelegraf```
 
