@@ -6,6 +6,8 @@
 Designed to work with Telegraf UDP listener input plugin.
 https://github.com/influxdata/telegraf/tree/master/plugins/inputs/udp_listener
 
+Pytelegraf supports and is tested to function with Telegraf version **0.13** and newer. It may work with older versions too but that is untested.
+
 Pytelegraf outputs InfluxDB line protocol https://docs.influxdata.com/influxdb/v0.13/write_protocols/line/
 
 ---
