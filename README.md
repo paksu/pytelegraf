@@ -11,6 +11,11 @@ Pytelegraf supports and is tested to function with Telegraf version **0.13** and
 Pytelegraf outputs InfluxDB line protocol https://docs.influxdata.com/influxdb/v0.13/write_protocols/line/
 
 ---
+### Contacting
+Need answers? Join pytelegraf on Gitter
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/pytelegraf/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
+
+
 If you find this library useful please let me know https://twitter.com/joonapaak
 
 If you have an idea how this library can be improved then open an issue or even better send a pull request :)
