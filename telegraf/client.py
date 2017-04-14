@@ -46,7 +46,7 @@ class TelegrafClient(ClientBase):
         Sends the given data to the socket via UDP
         """
         try:
-            self.socket.sendto(data.encode('ascii') + b'\n', (self.host, self.port))
+            self.socket.sendto(data.encode('utf8') + b'\n', (self.host, self.port))
         except (socket.error, RuntimeError):
             # Socket errors should fail silently so they don't affect anything else
             pass

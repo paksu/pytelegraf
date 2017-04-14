@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from telegraf.client import TelegrafClient, HttpClient
 from telegraf.protocol import Line
 from telegraf.utils import format_string, format_value
@@ -111,6 +113,14 @@ class TestTelegraf(unittest.TestCase):
 
         self.client.metric('some_series', 1, tags={'host': 'override-host-tag'})
         self.client.socket.sendto.assert_called_with(b'some_series,host=override-host-tag value=1i\n', self.addr)
+
+    def test_utf8_encoding(self):
+        self.client = TelegrafClient(self.host, self.port)
+        self.client.socket = mock.Mock()
+
+        self.client.metric(u'meäsurement', values={u'välue': 1, u'këy': u'valüe'}, tags={u'äpples': u'öranges'})
+        self.client.socket.sendto.assert_called_with(
+            b'me\xc3\xa4surement,\xc3\xa4pples=\xc3\xb6ranges k\xc3\xaby="val\xc3\xbce",v\xc3\xa4lue=1i\n', self.addr)
 
 
 class TestTelegrafHttp(unittest.TestCase):
