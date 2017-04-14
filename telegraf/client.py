@@ -15,7 +15,7 @@ class ClientBase(object):
         Append global tags configured for the client to the tags given then
         converts the data into InfluxDB Line protocol and sends to to socket
         """
-        if not measurement_name or not values:
+        if not measurement_name or values in (None, {}):
             # Don't try to send empty data
             return
 

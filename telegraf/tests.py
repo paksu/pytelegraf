@@ -1,4 +1,4 @@
-from telegraf.client import TelegrafClient, HttpClient
+from telegraf.client import ClientBase, TelegrafClient, HttpClient
 from telegraf.protocol import Line
 from telegraf.utils import format_string, format_value
 import unittest
@@ -85,6 +85,33 @@ class TestLine(unittest.TestCase):
             Line('some_series', {'a': 1, 'baa': 1, 'AAA': 1, 'aaa': 1}).to_line_protocol(),
             'some_series AAA=1i,a=1i,aaa=1i,baa=1i'
         )
+
+
+class TestClientBase(unittest.TestCase):
+
+    def test_zero_value(self):
+        self.client = ClientBase()
+        self.client.send = mock.Mock()
+        self.client.metric('some_series', 0)
+        self.client.send.assert_called_with('some_series value=0i')
+
+    def test_null_value(self):
+        self.client = ClientBase()
+        self.client.send = mock.Mock()
+        self.client.metric('some_series', None)
+        self.assertEqual(self.client.send.call_count, 0)
+
+    def test_empty_values_dict(self):
+        self.client = ClientBase()
+        self.client.send = mock.Mock()
+        self.client.metric('some_series', {})
+        self.assertEqual(self.client.send.call_count, 0)
+
+    def test_some_zero_values(self):
+        self.client = ClientBase()
+        self.client.send = mock.Mock()
+        self.client.metric('some_series', {'value_one': 1, 'value_zero': 0, 'value_none': None})
+        self.client.send.assert_called_with('some_series value_one=1i,value_zero=0i')
 
 
 class TestTelegraf(unittest.TestCase):
