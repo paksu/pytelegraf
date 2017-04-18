@@ -36,7 +36,7 @@ def format_value(value):
     """
     if isinstance(value, basestring):
         value = value.replace('"', '\"')
-        value = '"{0}"'.format(value)
+        value = u'"{0}"'.format(value)
     elif isinstance(value, bool):
         value = str(value)
     elif isinstance(value, int):

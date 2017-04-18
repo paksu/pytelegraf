@@ -41,7 +41,7 @@ class Line(object):
         # Remove None values
         sorted_values = [(k, v) for k, v in sorted_values if v is not None]
 
-        return ",".join("{0}={1}".format(format_string(k), format_value(v)) for k, v in sorted_values)
+        return u",".join(u"{0}={1}".format(format_string(k), format_value(v)) for k, v in sorted_values)
 
     def get_output_tags(self):
         """
@@ -55,7 +55,7 @@ class Line(object):
         sorted_tags = sorted(self.tags.items())
 
         # Finally render, escape and return the tag string
-        return ",".join("{0}={1}".format(format_string(k), format_string(v)) for k, v in sorted_tags)
+        return u",".join(u"{0}={1}".format(format_string(k), format_string(v)) for k, v in sorted_tags)
 
     def get_output_timestamp(self):
         """
@@ -69,7 +69,7 @@ class Line(object):
         """
         tags = self.get_output_tags()
 
-        return "{0}{1} {2}{3}".format(
+        return u"{0}{1} {2}{3}".format(
             self.get_output_measurement(),
             "," + tags if tags else '',
             self.get_output_values(),
