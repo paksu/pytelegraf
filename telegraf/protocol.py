@@ -4,7 +4,7 @@ from telegraf.utils import format_string, format_value
 class Line(object):
     def __init__(self, measurement, values, tags={}, timestamp=None):
         assert measurement, "Must have measurement"
-        assert values, "Must have values"
+        assert values not in (None, {}), "Must have values"
 
         # Name of the actual measurement
         self.measurement = measurement
@@ -37,6 +37,9 @@ class Line(object):
 
         # Sort the values in lexicographically by value name
         sorted_values = sorted(metric_values.items())
+
+        # Remove None values
+        sorted_values = [(k, v) for k, v in sorted_values if v is not None]
 
         return ",".join("{0}={1}".format(format_string(k), format_value(v)) for k, v in sorted_values)
 
