@@ -113,3 +113,4 @@ telegraf.metric('some-metric', 1)
 
 ### Contributors
 - bobo333
+- sbi
