@@ -78,8 +78,17 @@ http_client = HttpClient(host='localhost', port=8186)
 http_client.metric('some_metric', 123, tags={'server_name': 'my-server'})
 ```
 
-### Telegraf configuration
-Just follow the sample configuration https://github.com/influxdata/telegraf/tree/master/plugins/inputs/udp_listener
+### Telegraf configuration for versions 1.3 and higher
+Just follow the sample configuration https://github.com/influxdata/telegraf/tree/master/plugins/inputs/socket_listener
+
+```
+[[inputs.socket_listener]]
+  service_address = "udp://localhost:8092"
+  data_format = "influx"
+```
+
+### Telegraf configuration for versions lower than 1.3
+Just follow the sample configuration https://github.com/influxdata/telegraf/blob/b59266249dbeff43ba21bfd3dcc854b12eefd9ca/plugins/inputs/udp_listener/README.md
 
 ```
 [[inputs.udp_listener]]
@@ -87,6 +96,7 @@ Just follow the sample configuration https://github.com/influxdata/telegraf/tree
   allowed_pending_messages = 10000
   data_format = "influx"
 ```
+
 
 ### Using with Django
 
