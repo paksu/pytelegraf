@@ -10,13 +10,15 @@ def format_string(key):
     Formats either measurement names, tag names or tag values.
 
     Measurement name and any optional tags separated by commas. Measurement names, tag keys,
-    and tag values must escape any spaces or commas using a backslash (\). For example: \ and \,.
+    and tag values must escape any spaces, commas or equal signs using a backslash (\).
+    For example: \ and \,.
 
     All tag values are stored as strings and should not be surrounded in quotes.
     """
     if isinstance(key, basestring):
         key = key.replace(",", "\,")
         key = key.replace(" ", "\ ")
+        key = key.replace("=", "\=")
     return key
 
 
