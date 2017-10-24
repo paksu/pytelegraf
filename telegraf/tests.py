@@ -14,6 +14,7 @@ class TestLine(unittest.TestCase):
         self.assertEquals(format_string('foo,bar'), 'foo\,bar')
         self.assertEquals(format_string('foo bar'), 'foo\ bar')
         self.assertEquals(format_string('foo ,bar'), 'foo\ \,bar')
+        self.assertEquals(format_string('foo ,bar,baz=foobar'), 'foo\ \,bar\,baz\=foobar')
 
     def test_format_value(self):
         self.assertEquals(format_value('foo'), '"foo"')
