@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 
+from .__version__ import __title__, __description__, __version__  # noqa
 from .client import TelegrafClient, HttpClient
 
-VERSION = (0, 1, 1)
-__version__ = '.'.join(map(str, VERSION))
-__all__ = ['TelegrafClient', 'HttpClient']
+__all__ = ('TelegrafClient', 'HttpClient')

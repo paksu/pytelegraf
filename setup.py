@@ -1,9 +1,18 @@
+import os
+
 from setuptools import find_packages, setup
 
+
+here = os.path.abspath(os.path.dirname(__file__))
+
+about = {}
+with open(os.path.join(here, 'telegraf', '__version__.py'), 'r') as f:
+    exec(f.read(), about)
+
 setup(
-    name='pytelegraf',
-    version='0.3.2',
-    description='Telegraf client',
+    name=about['__title__'],
+    version=about['__version__'],
+    description=about['__description__'],
     author='paksu',
     url='https://github.com/paksu/pytelegraf',
     license='MIT',
