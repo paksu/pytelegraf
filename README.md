@@ -125,3 +125,4 @@ telegraf.metric('some-metric', 1)
 - bobo333
 - sbi
 - isvinogradov
+- umax
