@@ -2,7 +2,7 @@ from telegraf.utils import format_string, format_value
 
 
 class Line(object):
-    def __init__(self, measurement, values, tags={}, timestamp=None):
+    def __init__(self, measurement, values, tags=None, timestamp=None):
         assert measurement, "Must have measurement"
         assert values not in (None, {}), "Must have values"
 
@@ -11,7 +11,7 @@ class Line(object):
         # Single value or a dict of value_name: value pairs
         self.values = values
         # Dict of tags if any
-        self.tags = tags
+        self.tags = tags or {}
         # User provided timestamp if any
         self.timestamp = timestamp
 
