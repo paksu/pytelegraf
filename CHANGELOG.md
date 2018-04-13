@@ -1,3 +1,5 @@
+## 0.3.3
+- [#9](https://github.com/paksu/pytelegraf/pull/9) Define package version only in one place (thanks umax!)
 ## 0.3.2
 - [#8](https://github.com/paksu/pytelegraf/pull/8) Added Python 3.6 for tests (thanks umax!)
 - [#7](https://github.com/paksu/pytelegraf/pull/7) Correct usage of dict as default argument
